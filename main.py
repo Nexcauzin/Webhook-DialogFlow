@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-# Pra salvar as variáveis e armazenar no banco futuramente, coloca dicionário dentro
+# Pra salvar as variáveis e armazenar no banco
 dados_cont_plan = []
 dados_cad_prom = []
 
@@ -31,7 +31,11 @@ def main():
             plano = parametros['Plano']
             nome = parametros['person']['name']
             empresa = parametros['nome_empresa']
+            dados_cont_plan.append({'plano': plano,
+                                    'nome': nome,
+                                    'empresa': empresa})
         print(f'Plano: {plano} | nome: {nome} | empresa: {empresa}')
+
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": contratar_plano}]
@@ -47,6 +51,8 @@ def main():
             parametros = contexto['parameters']
             nome = parametros['person']['name']
             numero = parametros['phone-number']
+            dados_cad_prom.append({'nome': nome,
+                                   'numero': numero})
         print(f'Nome: {nome} | Tel: {numero}')
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
