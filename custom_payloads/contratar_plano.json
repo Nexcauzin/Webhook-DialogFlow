@@ -1,0 +1,6 @@
+{
+  "telegram": {
+    "text": "Tudo certo! {{nome}}, seus dados foram salvos, em breve, em horário comercial, um atendente irá falar com você e dar prosseguimento a contratação do seu plano!\n\nNós agradecemos o seu contato e a sua preferência!😉",
+    "parse_mode": "Markdown"
+  }
+}

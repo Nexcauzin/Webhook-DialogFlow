@@ -1,0 +1,20 @@
+{
+  "telegram": {
+    "text": "Ótimo! Você agora faz parte da lista de interessados(a).\nAssim que tivermos ofertas e novidades incríveis, você será o primeiro a saber!\nEstamos felizes por ter você conosco. 😁🤝\n\nDeseja algo mais?",
+    "reply_markup": {
+      "inline_keyboard": [
+        [
+          {
+            "text": "✔ Sim",
+            "callback_data": "Menu"
+          },
+          {
+            "text": "🛑 Não",
+            "callback_data": "Sair"
+          }
+        ]
+      ]
+    },
+    "parse_mode": "Markdown"
+  }
+}
