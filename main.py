@@ -34,7 +34,7 @@ def main():
             dados_cont_plan.append({'plano': plano,
                                     'nome': nome,
                                     'empresa': empresa})
-        print(f'Plano: {plano} | nome: {nome} | empresa: {empresa}')
+            print(f'Plano: {plano} | nome: {nome} | empresa: {empresa}')
 
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
@@ -53,7 +53,7 @@ def main():
             numero = parametros['phone-number']
             dados_cad_prom.append({'nome': nome,
                                    'numero': numero})
-        print(f'Nome: {nome} | Tel: {numero}')
+            print(f'Nome: {nome} | Tel: {numero}')
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": cadastro_promocoes}]
