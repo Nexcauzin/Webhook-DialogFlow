@@ -1,6 +1,7 @@
 __author__='nexcauzin'
 
 from flask import Flask, request, jsonify
+from sheets import cadastros
 import json
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ with open('custom_payloads/cadastro_promocoes.json', 'r+', encoding='utf-8') as 
 
 with open('custom_payloads/promocoes_ativas.json', 'r+', encoding='utf-8') as ver_prom:
     ver_promocoes = json.load(ver_prom)
+
 
 @app.route('/', methods=['POST'])
 def main():
@@ -53,9 +55,10 @@ def main():
             parametros = contexto['parameters']
             nome = parametros['person']['name']
             numero = parametros['phone-number']
-            dados_cad_prom.append({'nome': nome,
-                                   'numero': numero})
-            print(f'Nome: {nome} | Tel: {numero}')
+            dados_cad_prom.append([nome, numero])
+            print(f'Nome: {dados_cad_prom[0]} | Tel: {dados_cad_prom[1]}')
+            # Realiza o cadastro assíncrono com Threads
+            cadastros.cadastro_assinc(dados_cad_prom[-1])
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": cadastro_promocoes}]
@@ -72,10 +75,11 @@ def main():
             parametros = contexto['parameters']
             # Teste de existência para o parametro promoções
             promocoes = parametros['Promocoes']
+            print(f'Parametro: {promocoes}')
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": ver_promocoes}]
-
+        # elif data['originalDetectIntentRequest']['source'] == 'whatsapp':
 
     except:
         pass
@@ -83,8 +87,8 @@ def main():
     # Descomenta quando quiser o json bruto
     #print(data)
 
-
     return jsonify(data)
+
 
 if __name__ == "__main__":
     app.debug = False
