@@ -36,7 +36,8 @@ def cadastrar_sheets(dados):
     #(pode ser até na hora de mandar as mensagens periodicas)
     # Tratando os duplicados:
     duplicados = worksheet.get_all_values()
-    colunas = ['Nome', 'Telefone'] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
+    print(duplicados[0])
+    colunas = duplicados[0] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
     dados_limpos = [list(item) for item in set(tuple(row) for row in duplicados)] # Tirando duplicados
     dados_limpos.remove(colunas)
     worksheet.clear() # Limpando sheet

@@ -20,6 +20,9 @@ with open('custom_payloads/cadastro_promocoes.json', 'r+', encoding='utf-8') as 
 with open('custom_payloads/promocoes_ativas.json', 'r+', encoding='utf-8') as ver_prom:
     ver_promocoes = json.load(ver_prom)
 
+# Pra iniciar já com login
+cadastros.fazer_login()
+
 @app.route('/', methods=['POST'])
 def main():
     data = request.get_json(silent=True)
