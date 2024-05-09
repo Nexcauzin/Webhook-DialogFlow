@@ -20,7 +20,6 @@ with open('custom_payloads/cadastro_promocoes.json', 'r+', encoding='utf-8') as 
 with open('custom_payloads/promocoes_ativas.json', 'r+', encoding='utf-8') as ver_prom:
     ver_promocoes = json.load(ver_prom)
 
-
 @app.route('/', methods=['POST'])
 def main():
     data = request.get_json(silent=True)
@@ -55,10 +54,10 @@ def main():
             parametros = contexto['parameters']
             nome = parametros['person']['name']
             numero = parametros['phone-number']
-            dados_cad_prom.append([nome, numero])
-            print(f'Nome: {dados_cad_prom[0]} | Tel: {dados_cad_prom[1]}')
+            #dados_cad_prom.append([nome, numero])
+            print(f'Nome: {nome} | Tel: {numero}')
             # Realiza o cadastro assíncrono com Threads
-            cadastros.cadastro_assinc(dados_cad_prom[-1])
+            cadastros.cadastro_assinc([nome, numero])
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": cadastro_promocoes}]
