@@ -31,7 +31,9 @@ def cadastrar_sheets(dados):
     worksheet.append_rows(dados_formatados)
 
 
-    ## ESSE TRATAMENTO SÓ TA FUNCIONANDO PARA DUPLICADOS DE NOME E TELEFONE, AJUSTAR PARA DUPLICADOS DE TELEFONE
+    ## ESSE TRATAMENTO SÓ TA FUNCIONANDO PARA DUPLICADOS DE NOME E TELEFONE
+    # Pensar num tratamento para quando tiver duplicado de Telefone
+    #(pode ser até na hora de mandar as mensagens periodicas)
     # Tratando os duplicados:
     duplicados = worksheet.get_all_values()
     colunas = ['Nome', 'Telefone'] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
