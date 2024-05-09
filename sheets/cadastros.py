@@ -34,7 +34,7 @@ def cadastrar_sheets(dados):
     ## ESSE TRATAMENTO SÓ TA FUNCIONANDO PARA DUPLICADOS DE NOME E TELEFONE, AJUSTAR PARA DUPLICADOS DE TELEFONE
     # Tratando os duplicados:
     duplicados = worksheet.get_all_values()
-    colunas = duplicados[0] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
+    colunas = ['Nome', 'Telefone'] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
     dados_limpos = [list(item) for item in set(tuple(row) for row in duplicados)] # Tirando duplicados
     dados_limpos.remove(colunas)
     worksheet.clear() # Limpando sheet
