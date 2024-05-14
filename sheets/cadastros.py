@@ -50,6 +50,7 @@ def cadastro_assinc(dados):
     thread.start()
 
 
+## Aqui vai ficar a parte de mensagens periódicas
 def confere_lista():
     # Abrindo planilha
     sheet = abrir_planilha()
