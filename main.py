@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from sheets import cadastros
 from cron import envia_promocoes
 from cron.envia_promocoes import main
+from sheets.cadastros import fazer_login, abrir_planilha, cadastrar_sheets
 
 import asyncio
 import json
@@ -33,7 +34,7 @@ with open('custom_payloads/promocoes_ativas.json', 'r+', encoding='utf-8') as ve
     ver_promocoes = json.load(ver_prom)
 
 # Pra iniciar já com login
-cadastros.fazer_login()
+cadastros.asyncio.run(fazer_login())
 
 @app.route('/', methods=['POST'])
 def main():
@@ -72,7 +73,7 @@ def main():
             #dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | Tel: {numero}')
             # Realiza o cadastro assíncrono com Threads
-            cadastros.cadastro_assinc([nome, numero])
+            cadastros.asyncio.run(cadastrar_sheets([nome, numero]))
 
         if data['originalDetectIntentRequest']['source'] == 'telegram':
             data['fulfillmentText'] = [{"payload": cadastro_promocoes}]

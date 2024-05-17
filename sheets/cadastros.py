@@ -1,29 +1,29 @@
 import gspread
-from threading import Thread
+import asyncio
 
 gc = None
 
 url = "https://docs.google.com/spreadsheets/d/1kXX6HRXpKvY8OOCfNPeZTgY4618dD3hdL9_8gWpXKvk/edit#gid=0"
 
-def fazer_login():
+async def fazer_login():
     global gc
     # Acessando as credenciais
     print('(LOGIN) Acessando credenciais do Sheets')
     gc = gspread.service_account(filename="sheets/credentials.json")
     print('(LOGIN) Credenciais Aceitas')
 
-def abrir_planilha():
+async def abrir_planilha():
     if gc is None:
-        fazer_login()
+        await fazer_login()
     # Abrindo a URL da planilha
     print('(ABERTURA) Abrindo URL da planilha')
     sheet = gc.open_by_url(url)
     print('(ABERTURA) URL Aberto e planilha importada!')
     return sheet
 
-def cadastrar_sheets(dados):
+async def cadastrar_sheets(dados):
     # Abrindo planilha
-    sheet = abrir_planilha()
+    sheet = await abrir_planilha()
 
     worksheet = sheet.worksheet("PromPeriodicaWpp")
     dados_formatados = [[str(item) for item in dados]]
@@ -35,7 +35,7 @@ def cadastrar_sheets(dados):
     #(pode ser até na hora de mandar as mensagens periodicas)
     # Tratando os duplicados:
     duplicados = worksheet.get_all_values()
-    print(duplicados[0])
+    #print(duplicados[0])
     colunas = duplicados[0] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
     dados_limpos = [list(item) for item in set(tuple(row) for row in duplicados)] # Tirando duplicados
     dados_limpos.remove(colunas)
@@ -43,7 +43,3 @@ def cadastrar_sheets(dados):
     worksheet.append_row(colunas) # Linha de nomes do Sheet
     worksheet.append_rows(dados_limpos) # Linhas de dados
 
-
-def cadastro_assinc(dados):
-    thread = Thread(target=cadastrar_sheets, args=(dados,))
-    thread.start()
