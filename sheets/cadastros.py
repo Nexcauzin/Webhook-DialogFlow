@@ -1,4 +1,3 @@
-import pandas as pd
 import gspread
 from threading import Thread
 
@@ -26,7 +25,7 @@ def cadastrar_sheets(dados):
     # Abrindo planilha
     sheet = abrir_planilha()
 
-    worksheet = sheet.worksheet("PromPeriodica")
+    worksheet = sheet.worksheet("PromPeriodicaWpp")
     dados_formatados = [[str(item) for item in dados]]
     worksheet.append_rows(dados_formatados)
 
@@ -48,14 +47,3 @@ def cadastrar_sheets(dados):
 def cadastro_assinc(dados):
     thread = Thread(target=cadastrar_sheets, args=(dados,))
     thread.start()
-
-
-## Aqui vai ficar a parte de mensagens periódicas
-def confere_lista():
-    # Abrindo planilha
-    sheet = abrir_planilha()
-    print('(AGENDAMENTO) URL Aberto e planilha importada!')
-    worksheet = sheet.worksheet("PromPeriodica")
-
-    #for i in range(1, len(worksheet)):
-        #Aqui a lógica para iterar a cada item do worksheet enviando a mensagem!

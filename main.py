@@ -2,6 +2,7 @@ __author__='nexcauzin'
 
 from flask import Flask, request, jsonify
 from sheets import cadastros
+#from cron import envia_promocoes
 import json
 
 app = Flask(__name__)
@@ -9,6 +10,10 @@ app = Flask(__name__)
 # Pra salvar as variáveis e armazenar no banco
 dados_cont_plan = []
 dados_cad_prom = []
+
+# Variáveis para o envio periódico de mensagens:
+#envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
+#envia_promocoes.api_zac = None
 
 # Importando os Custom Payload:
 with open('custom_payloads/contratar_plano.json', 'r+', encoding='utf-8') as cont_plan:
@@ -29,7 +34,7 @@ def main():
 
     contextos = data['queryResult']['outputContexts']
 
-    # Depois arrumar uma lógica para contexto geral, só ir pegando os parâmetros para se basear na ação
+    # Depois fazer isso seguir uma lógica assíncrona de execução, para não interromper o código
     # Bloco 1 -> Testa se é para Contratar Plano
     try:
         for contexto in contextos:
@@ -55,8 +60,8 @@ def main():
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
-            nome = parametros['person']['name']
-            numero = parametros['phone-number']
+            nome = parametros['nome']
+            numero = parametros['numero']
             #dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | Tel: {numero}')
             # Realiza o cadastro assíncrono com Threads
@@ -87,7 +92,7 @@ def main():
         pass
 
     # Descomenta quando quiser o json bruto
-    #print(data)
+    print(data)
 
     return jsonify(data)
 
