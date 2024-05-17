@@ -9,15 +9,13 @@ import pandas as pd
 from sheets import ler_telegram
 
 token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
-#token_telegram = None
-id_usuario = '2079298675'
 
 #id meu: 2079298675
 #id de jf: 6758080824
 
 async def send_telegram_message():
     ler_telegram.ConfereListaTelegram() # Pegando os dados atualizados
-    dados_telegram = pd.read_json('dados_telegram.json') #Salvando em um DataFrame
+    dados_telegram = pd.read_json('cron/dados_telegram.json') #Salvando em um DataFrame
     tentas = 0 #Variável que vai ser iterada
 
     while tentas < len(dados_telegram):
@@ -26,7 +24,7 @@ async def send_telegram_message():
             user_id = int(dados_telegram['ID'][tentas])
 
             # Leitura do texto que será enviado
-            with open('MensagemTelegram.txt', 'r+', encoding='utf-8') as file:
+            with open('cron/MensagemTelegram.txt', 'r+', encoding='utf-8') as file:
                 message = file.read()
 
             # Envio da mensagem
@@ -48,4 +46,3 @@ async def main():
         await asyncio.sleep(1)
         schedule.run_pending()
 
-asyncio.run(main())

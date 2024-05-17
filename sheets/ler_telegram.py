@@ -1,5 +1,5 @@
 import pandas as pd
-import cadastros
+from sheets import cadastros
 
 # Aqui vai ficar a parte de mensagens periódicas
 def ConfereListaTelegram():

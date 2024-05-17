@@ -2,7 +2,10 @@ __author__='nexcauzin'
 
 from flask import Flask, request, jsonify
 from sheets import cadastros
-#from cron import envia_promocoes
+from cron import envia_promocoes
+from cron.envia_promocoes import main
+
+import asyncio
 import json
 
 app = Flask(__name__)
@@ -12,8 +15,12 @@ dados_cont_plan = []
 dados_cad_prom = []
 
 # Variáveis para o envio periódico de mensagens:
-#envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
+# TOKEN do bot Telegram
+envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 #envia_promocoes.api_zac = None
+
+# Inicializandao o CRON
+#envia_promocoes.asyncio.run(main())
 
 # Importando os Custom Payload:
 with open('custom_payloads/contratar_plano.json', 'r+', encoding='utf-8') as cont_plan:
@@ -92,7 +99,7 @@ def main():
         pass
 
     # Descomenta quando quiser o json bruto
-    print(data)
+    #print(data)
 
     return jsonify(data)
 
