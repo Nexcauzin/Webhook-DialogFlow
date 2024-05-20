@@ -1,12 +1,12 @@
 import asyncio
-
 import httpx
 import telegram.error
 from telegram import Bot
 import schedule
-import time
 import pandas as pd
 from sheets import ler_telegram
+from sheets.cadastros import fazer_login
+
 
 token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 
@@ -14,6 +14,7 @@ token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 #id de jf: 6758080824
 
 async def send_telegram_message():
+    await ler_telegram.ConfereListaTelegram()
     ler_telegram.ConfereListaTelegram() # Pegando os dados atualizados
     dados_telegram = pd.read_json('cron/dados_telegram.json') #Salvando em um DataFrame
     tentas = 0 #Variável que vai ser iterada
@@ -40,9 +41,9 @@ async def send_telegram_message():
 #asyncio.run(send_telegram_message())
 
 async def main():
-
-    schedule.every(5).seconds.do(lambda: asyncio.create_task(send_telegram_message()))
+    await fazer_login()
+    schedule.every(2).minutes.do(lambda: asyncio.create_task(send_telegram_message()))
     while True:
-        await asyncio.sleep(1)
+        await asyncio.sleep(60)
         schedule.run_pending()
 

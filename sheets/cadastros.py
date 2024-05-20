@@ -1,10 +1,10 @@
 import gspread
-import asyncio
 
 gc = None
 
 url = "https://docs.google.com/spreadsheets/d/1kXX6HRXpKvY8OOCfNPeZTgY4618dD3hdL9_8gWpXKvk/edit#gid=0"
 
+# Testa colocar para abrir a planilha na main
 async def fazer_login():
     global gc
     # Acessando as credenciais
@@ -21,7 +21,7 @@ async def abrir_planilha():
     print('(ABERTURA) URL Aberto e planilha importada!')
     return sheet
 
-async def cadastrar_sheets(dados):
+async def cadastrar_sheets_zap(dados):
     # Abrindo planilha
     sheet = await abrir_planilha()
 
@@ -36,6 +36,23 @@ async def cadastrar_sheets(dados):
     # Tratando os duplicados:
     duplicados = worksheet.get_all_values()
     #print(duplicados[0])
+    colunas = duplicados[0] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
+    dados_limpos = [list(item) for item in set(tuple(row) for row in duplicados)] # Tirando duplicados
+    dados_limpos.remove(colunas)
+    worksheet.clear() # Limpando sheet
+    worksheet.append_row(colunas) # Linha de nomes do Sheet
+    worksheet.append_rows(dados_limpos) # Linhas de dados
+
+async def cadastrar_sheets_tel(dados):
+    # Abrindo planilha
+    sheet = await abrir_planilha()
+
+    worksheet = sheet.worksheet("PromPeriodicaTel")
+    dados_formatados = [[str(item) for item in dados]]
+    worksheet.append_rows(dados_formatados)
+
+    # Tratando os duplicados:
+    duplicados = worksheet.get_all_values()
     colunas = duplicados[0] # Pegando os nomes das colunas, só por garantia (teve uma época que tava duplicando todos os dados ;-;)
     dados_limpos = [list(item) for item in set(tuple(row) for row in duplicados)] # Tirando duplicados
     dados_limpos.remove(colunas)
