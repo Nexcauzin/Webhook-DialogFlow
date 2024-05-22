@@ -15,8 +15,15 @@ executor = Executor(app)
 envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 
 # Inicializando o CRON
+def start_async_loop():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(envia_promocoes.main())
+    loop.close()
+
 def start_cron():
-    asyncio.run(envia_promocoes.main())
+    thread = Thread(target=start_async_loop)
+    thread.start()
 
 start_cron()
 
@@ -65,5 +72,5 @@ def main_route():
 
 if __name__ == "__main__":
     app.debug = False
-    executor.submit(start_cron)
+    start_cron()
     app.run()
