@@ -6,8 +6,10 @@ from cron import envia_promocoes
 from sheets.cadastros import cadastrar_sheets_zap, cadastrar_sheets_tel
 from threading import Thread
 import asyncio
+from flask_executor import Executor
 
 app = Flask(__name__)
+executor = Executor(app)
 
 # Variáveis para o envio periódico de mensagens:
 envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
@@ -63,4 +65,5 @@ def main_route():
 
 if __name__ == "__main__":
     app.debug = False
+    executor.submit(start_cron)
     app.run()
