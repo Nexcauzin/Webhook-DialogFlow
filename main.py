@@ -1,10 +1,9 @@
-__author__='nexcauzin'
+__author__ = 'nexcauzin'
 
 from flask import Flask, request, jsonify
 from sheets import cadastros
 from cron import envia_promocoes
-from sheets.cadastros import fazer_login, cadastrar_sheets_zap, cadastrar_sheets_tel
-from cron.envia_promocoes import main
+from sheets.cadastros import cadastrar_sheets_zap, cadastrar_sheets_tel
 from threading import Thread
 
 app = Flask(__name__)
@@ -13,50 +12,42 @@ app = Flask(__name__)
 # TOKEN do bot Telegram
 envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 
-# Pra iniciar já com login
-cadastros.fazer_login()
+# Inicializando o CRON
+def start_cron():
+    cron_thread = Thread(target=envia_promocoes.main)
+    cron_thread.start()
 
-# Inicializandao o CRON
-### Coloca a chamada da função com Threads
+start_cron()
 
 @app.route('/', methods=['POST'])
-def main():
+def main_route():
     data = request.get_json(silent=True, force=True)
-
     contextos = data['queryResult']['outputContexts']
 
-    # Bloco 1 -> Testa se é para Cadastrar na Lista de Transmissão (WhatsApp
+    # Bloco 1 -> Testa se é para Cadastrar na Lista de Transmissão (WhatsApp)
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
             nome = parametros['nome']
             numero = parametros['numero']
-            #dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | Tel: {numero}')
-            # Realiza o cadastro assíncrono com Threads
-            ##cadastros.asyncio.run(cadastrar_sheets_zap([nome, numero]))
-            ## Coloca a chamada da função acima com threads
-    except:
-        pass
+            Thread(target=cadastrar_sheets_zap, args=([nome, numero],)).start()
+    except Exception as e:
+        print(f"Erro no cadastro do WhatsApp: {e}")
 
-
-        # Bloco 2 -> Testa se é para Cadastrar na Lista de Transmissão (Telegram)
+    # Bloco 2 -> Testa se é para Cadastrar na Lista de Transmissão (Telegram)
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
             nome = parametros['nome']
             id = data['session'].split('/')[-1]
-            # dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | ID: {id}')
-            # Realiza o cadastro assíncrono com Threads
-            ##cadastros.asyncio.run(cadastrar_sheets_tel([nome, id]))
-            ## Coloca a chamada da função acima com threads
-    except:
-        pass
-
+            Thread(target=cadastrar_sheets_tel, args=([nome, id],)).start()
+    except Exception as e:
+        print(f"Erro no cadastro do Telegram: {e}")
 
     # Descomenta quando quiser o json bruto
-    print(data)
+    #print(data)
 
     return jsonify(data)
 
