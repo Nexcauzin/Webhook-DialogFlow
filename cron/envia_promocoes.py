@@ -34,7 +34,8 @@ async def schedule_messages():
 
     while True:
         await send_telegram_message()
-        await asyncio.sleep(15)
+        await asyncio.sleep(15 * 24 * 60 * 60)      # 15 dias em segundos
+                           #dia/hora/min/sec
 
 async def main():
     await schedule_messages()
