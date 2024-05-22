@@ -5,6 +5,7 @@ from sheets import cadastros
 from cron import envia_promocoes
 from sheets.cadastros import fazer_login, cadastrar_sheets_zap, cadastrar_sheets_tel
 from cron.envia_promocoes import main
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -13,10 +14,10 @@ app = Flask(__name__)
 envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 
 # Pra iniciar já com login
-cadastros.asyncio.run(fazer_login())
+cadastros.fazer_login()
 
 # Inicializandao o CRON
-envia_promocoes.asyncio.run(main())
+### Coloca a chamada da função com Threads
 
 @app.route('/', methods=['POST'])
 def main():
@@ -33,8 +34,8 @@ def main():
             #dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | Tel: {numero}')
             # Realiza o cadastro assíncrono com Threads
-            cadastros.asyncio.run(cadastrar_sheets_zap([nome, numero]))
-
+            ##cadastros.asyncio.run(cadastrar_sheets_zap([nome, numero]))
+            ## Coloca a chamada da função acima com threads
     except:
         pass
 
@@ -48,8 +49,8 @@ def main():
             # dados_cad_prom.append([nome, numero])
             print(f'Nome: {nome} | ID: {id}')
             # Realiza o cadastro assíncrono com Threads
-            cadastros.asyncio.run(cadastrar_sheets_tel([nome, id]))
-
+            ##cadastros.asyncio.run(cadastrar_sheets_tel([nome, id]))
+            ## Coloca a chamada da função acima com threads
     except:
         pass
 

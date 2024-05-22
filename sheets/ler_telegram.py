@@ -1,10 +1,9 @@
 import pandas as pd
 from sheets import cadastros
-import gspread
 
-async def ConfereListaTelegram():
+def ConfereListaTelegram():
     # Abrindo planilha
-    sheet = await cadastros.abrir_planilha()
+    sheet = cadastros.abrir_planilha()
     print('(TELEGRAM) URL Aberto e planilha importada!')
     worksheet = sheet.worksheet("PromPeriodicaTel")
     # Pegando os valores

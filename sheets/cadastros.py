@@ -1,29 +1,30 @@
 import gspread
+from threading import Thread
 
 gc = None
 
 url = "https://docs.google.com/spreadsheets/d/1kXX6HRXpKvY8OOCfNPeZTgY4618dD3hdL9_8gWpXKvk/edit#gid=0"
 
 # Testa colocar para abrir a planilha na main
-async def fazer_login():
+def fazer_login():
     global gc
     # Acessando as credenciais
     print('(LOGIN) Acessando credenciais do Sheets')
     gc = gspread.service_account(filename="sheets/credentials.json")
     print('(LOGIN) Credenciais Aceitas')
 
-async def abrir_planilha():
+def abrir_planilha():
     if gc is None:
-        await fazer_login()
+        fazer_login()
     # Abrindo a URL da planilha
     print('(ABERTURA) Abrindo URL da planilha')
     sheet = gc.open_by_url(url)
     print('(ABERTURA) URL Aberto e planilha importada!')
     return sheet
 
-async def cadastrar_sheets_zap(dados):
+def cadastrar_sheets_zap(dados):
     # Abrindo planilha
-    sheet = await abrir_planilha()
+    sheet = abrir_planilha()
 
     worksheet = sheet.worksheet("PromPeriodicaWpp")
     dados_formatados = [[str(item) for item in dados]]
@@ -43,9 +44,9 @@ async def cadastrar_sheets_zap(dados):
     worksheet.append_row(colunas) # Linha de nomes do Sheet
     worksheet.append_rows(dados_limpos) # Linhas de dados
 
-async def cadastrar_sheets_tel(dados):
+def cadastrar_sheets_tel(dados):
     # Abrindo planilha
-    sheet = await abrir_planilha()
+    sheet = abrir_planilha()
 
     worksheet = sheet.worksheet("PromPeriodicaTel")
     dados_formatados = [[str(item) for item in dados]]

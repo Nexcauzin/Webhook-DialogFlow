@@ -13,8 +13,8 @@ token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik'
 #id meu: 2079298675
 #id de jf: 6758080824
 
-async def send_telegram_message():
-    await ler_telegram.ConfereListaTelegram()
+def send_telegram_message():
+    ler_telegram.ConfereListaTelegram()
     ler_telegram.ConfereListaTelegram() # Pegando os dados atualizados
     dados_telegram = pd.read_json('cron/dados_telegram.json') #Salvando em um DataFrame
     tentas = 0 #Variável que vai ser iterada
@@ -29,7 +29,7 @@ async def send_telegram_message():
                 message = file.read()
 
             # Envio da mensagem
-            await bot.send_message(chat_id=user_id, text=message, parse_mode='Markdown')
+            bot.send_message(chat_id=user_id, text=message, parse_mode='Markdown')
 
             tentas += 1 # Para iterar no loop
 
@@ -40,10 +40,11 @@ async def send_telegram_message():
 # Executando a função de forma assíncrona
 #asyncio.run(send_telegram_message())
 
-async def main():
-    await fazer_login()
-    schedule.every(2).minutes.do(lambda: asyncio.create_task(send_telegram_message()))
+def main():
+    fazer_login()
+    ## Abaixo a lógica do Cron
+    # schedule.every(2).minutes.do(lambda: )
     while True:
-        await asyncio.sleep(60)
+        asyncio.sleep(60)
         schedule.run_pending()
 
