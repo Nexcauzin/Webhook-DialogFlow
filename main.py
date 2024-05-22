@@ -23,6 +23,8 @@ def main_route():
     data = request.get_json(silent=True, force=True)
     contextos = data['queryResult']['outputContexts']
 
+    numero = None # Para teste de variável
+
     cadastro_whatsapp_feito = False
     cadastro_telegram_feito = False
 
@@ -36,12 +38,15 @@ def main_route():
                 print(f'Nome: {nome} | Tel: {numero}')
                 Thread(target=cadastrar_sheets_zap, args=([nome, numero],)).start()
                 cadastro_whatsapp_feito = True
-        return jsonify(data)
 
     except Exception as e:
         print(f"Erro no cadastro do WhatsApp: {e}")
 
+
     # Bloco 2 -> Testa se é para Cadastrar na Lista de Transmissão (Telegram)
+    if numero is not None: # Para garantir que nã o vai rodar esse bloco caso o anterior tenha sido executado
+        return jsonify(data)
+
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
