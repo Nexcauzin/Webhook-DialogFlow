@@ -5,6 +5,7 @@ from sheets import cadastros
 from cron import envia_promocoes
 from sheets.cadastros import cadastrar_sheets_zap, cadastrar_sheets_tel
 from threading import Thread
+import asyncio
 
 app = Flask(__name__)
 
@@ -13,8 +14,7 @@ envia_promocoes.token_telegram = '7047287612:AAEMimLtSeFAbVsgkY8cmGKnZZhVjon5vik
 
 # Inicializando o CRON
 def start_cron():
-    cron_thread = Thread(target=envia_promocoes.main)
-    cron_thread.start()
+    asyncio.run(envia_promocoes.main())
 
 start_cron()
 
