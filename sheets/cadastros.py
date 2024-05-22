@@ -17,13 +17,12 @@ def fazer_login():
 
 def abrir_planilha():
     global sheet
-    if sheet is None:
-        fazer_login()
-        with lock:
-            if sheet is None:  # Verificar novamente para evitar condição de corrida
-                print('(ABERTURA) Abrindo URL da planilha')
-                sheet = gc.open_by_url(url)
-                print('(ABERTURA) URL Aberto e planilha importada!')
+    fazer_login()
+    with lock:
+        if sheet is None:  # Verificar novamente para evitar condição de corrida
+            print('(ABERTURA) Abrindo URL da planilha')
+            sheet = gc.open_by_url(url)
+            print('(ABERTURA) URL Aberto e planilha importada!')
     return sheet
 
 def cadastrar_sheets_zap(dados):

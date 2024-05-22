@@ -30,15 +30,14 @@ def main_route():
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
-            nome = parametros['nome']
-            numero = parametros['numero']
-            if nome and numero:
+            nome = parametros.get('nome')
+            numero = parametros.get('numero')
+            if nome and numero and not cadastro_whatsapp_feito:
                 print(f'Nome: {nome} | Tel: {numero}')
                 Thread(target=cadastrar_sheets_zap, args=([nome, numero],)).start()
                 cadastro_whatsapp_feito = True
-        if not cadastro_whatsapp_feito:
-            print('Nenhum cadastro para WhatsApp foi encontrado nos contextos')
         return jsonify(data)
+
     except Exception as e:
         print(f"Erro no cadastro do WhatsApp: {e}")
 
@@ -46,14 +45,12 @@ def main_route():
     try:
         for contexto in contextos:
             parametros = contexto['parameters']
-            nome = parametros['nome']
+            nome = parametros.get('nome')
             id = data['session'].split('/')[-1]
-            if nome and id:
+            if nome and id and not cadastro_telegram_feito:
                 print(f'Nome: {nome} | ID: {id}')
                 Thread(target=cadastrar_sheets_tel, args=([nome, id],)).start()
                 cadastro_telegram_feito = True
-        if not cadastro_telegram_feito:
-            print('Nenhum cadastro para Telegram foi encontrado nos contextos')
     except Exception as e:
         print(f"Erro no cadastro do Telegram: {e}")
 
