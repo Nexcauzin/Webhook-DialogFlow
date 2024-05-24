@@ -1,7 +1,4 @@
-__author__ = 'nexcauzin'
-
 from flask import Flask, request, jsonify
-from sheets import cadastros
 from cron import envia_promocoes
 from sheets.cadastros import cadastrar_sheets_zap, cadastrar_sheets_tel
 from threading import Thread
